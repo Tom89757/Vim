@@ -1244,5 +1244,8 @@
   "lint-staged": {
     "*.{ts,js,json,md,yml}": "prettier --write",
     "*.ts": "eslint --fix"
+  },
+  "exports": {
+    "extension/vimAPI": "./out/vimAPI"
   }
 }

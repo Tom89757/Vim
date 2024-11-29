@@ -27,6 +27,7 @@ import { Register } from './src/register/register';
 import { vimrc } from './src/configuration/vimrc';
 import * as path from 'path';
 import { Logger } from './src/util/logger';
+import { activate as activateVimAPI } from './src/vimAPI';
 
 export { getAndUpdateModeHandler } from './extensionBase';
 
@@ -35,6 +36,9 @@ export async function activate(context: vscode.ExtensionContext) {
   Globals.extensionStoragePath = context.globalStorageUri.fsPath;
 
   await activateFunc(context);
+
+  const vimAPI = activateVimAPI(context);
+  context.subscriptions.push(vimAPI);
 
   registerEventListener(context, vscode.workspace.onDidSaveTextDocument, async (document) => {
     if (vimrc.vimrcPath && path.relative(document.fileName, vimrc.vimrcPath) === '') {
