@@ -3,6 +3,7 @@ import { configuration } from './../../configuration/configuration';
 import { RegisterAction } from './../base';
 import { BaseMovement, IMovement } from '../baseMotion';
 import { Position } from 'vscode';
+import { EventEmitter } from 'vscode';
 
 @RegisterAction
 export class SneakForward extends BaseMovement {
@@ -12,14 +13,30 @@ export class SneakForward extends BaseMovement {
   ];
   override isJump = true;
 
+  // 定义静态事件发射器
+  static onSneakForwardStart = new EventEmitter<{ keysPressed: string[] }>();
+  static onSneakForwardEnd = new EventEmitter<{ line: number; searchString: string }>();
+
   public override couldActionApply(vimState: VimState, keysPressed: string[]): boolean {
     const startingLetter = vimState.recordedState.operator === undefined ? 's' : 'z';
 
-    return (
+    // return (
+    //   configuration.sneak &&
+    //   super.couldActionApply(vimState, keysPressed) &&
+    //   keysPressed[0] === startingLetter
+    // );
+
+    const canApply =
       configuration.sneak &&
       super.couldActionApply(vimState, keysPressed) &&
-      keysPressed[0] === startingLetter
-    );
+      keysPressed[0] === startingLetter;
+
+    if (canApply && keysPressed.length === 1) {
+      // 当仅按下's'时，触发开始事件
+      SneakForward.onSneakForwardStart.fire({ keysPressed });
+    }
+
+    return canApply;
   }
 
   public override async execAction(
@@ -63,6 +80,8 @@ export class SneakForward extends BaseMovement {
       }
 
       if (matchIndex >= 0) {
+        // 触发结束事件
+        SneakForward.onSneakForwardEnd.fire({ line: i, searchString });
         return new Position(i, matchIndex);
       }
     }
