@@ -27,7 +27,8 @@ import { Register } from './src/register/register';
 import { vimrc } from './src/configuration/vimrc';
 import * as path from 'path';
 import { Logger } from './src/util/logger';
-import { activate as activateVimAPI } from './src/vimAPI';
+
+import { getVimAPI } from './src/vimAPI';
 
 export { getAndUpdateModeHandler } from './extensionBase';
 
@@ -37,7 +38,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   await activateFunc(context);
 
-  const vimAPI = activateVimAPI(context);
+  // 获取VimAPI实例并注册到subscriptions
+  const vimAPI = getVimAPI();
   context.subscriptions.push(vimAPI);
 
   registerEventListener(context, vscode.workspace.onDidSaveTextDocument, async (document) => {
@@ -60,8 +62,14 @@ export async function activate(context: vscode.ExtensionContext) {
     },
     false,
   );
+
+  // 返回API实例供其他扩展使用
+  return vimAPI;
 }
 
 export async function deactivate() {
   await Register.saveToDisk(true);
 }
+
+// 导出VimAPI类型供其他扩展使用
+export type { VimAPI, ISneakStartEvent, ISneakEndEvent } from './src/vimAPI';

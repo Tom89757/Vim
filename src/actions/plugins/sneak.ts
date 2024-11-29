@@ -4,6 +4,7 @@ import { RegisterAction } from './../base';
 import { BaseMovement, IMovement } from '../baseMotion';
 import { Position } from 'vscode';
 import { EventEmitter } from 'vscode';
+import { ISneakStartEvent, ISneakEndEvent } from '../../vimAPI';
 
 @RegisterAction
 export class SneakForward extends BaseMovement {
@@ -13,9 +14,9 @@ export class SneakForward extends BaseMovement {
   ];
   override isJump = true;
 
-  // 定义静态事件发射器
-  static onSneakForwardStart = new EventEmitter<{ keysPressed: string[] }>();
-  static onSneakForwardEnd = new EventEmitter<{ line: number; searchString: string }>();
+  // 定义静态事件发射器并使用类型
+  static onSneakForwardStart = new EventEmitter<ISneakStartEvent>();
+  static onSneakForwardEnd = new EventEmitter<ISneakEndEvent>();
 
   public override couldActionApply(vimState: VimState, keysPressed: string[]): boolean {
     const startingLetter = vimState.recordedState.operator === undefined ? 's' : 'z';

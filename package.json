@@ -1246,6 +1246,10 @@
     "*.ts": "eslint --fix"
   },
   "exports": {
-    "extension/vimAPI": "./out/vimAPI"
+    ".": {
+      "types": "./out/extension.js",
+      "default": "./out/extension.js"
+    },
+    "./package.json": "./package.json"
   }
 }
