@@ -72,4 +72,10 @@ export async function deactivate() {
 }
 
 // 导出VimAPI类型供其他扩展使用
-export type { VimAPI, ISneakStartEvent, ISneakEndEvent } from './src/vimAPI';
+export type {
+  VimAPI,
+  ISneakStartEvent,
+  ISneakEndEvent,
+  IFindStartEvent,
+  IFindEndEvent,
+} from './src/vimAPI';

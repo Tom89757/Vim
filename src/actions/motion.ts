@@ -5,7 +5,7 @@ import { CursorMoveByUnit, CursorMovePosition, TextEditor } from './../textEdito
 import { isVisualMode, Mode } from './../mode/mode';
 import { PairMatcher } from './../common/matching/matcher';
 import { QuoteMatcher } from './../common/matching/quoteMatcher';
-import { RegisterAction } from './base';
+import { KeypressState, RegisterAction } from './base';
 import { RegisterMode } from './../register/register';
 import { TagMatcher } from './../common/matching/tagMatcher';
 import { VimState } from './../state/vimState';
@@ -29,6 +29,9 @@ import { SearchDirection } from '../vimscript/pattern';
 import { SmartQuoteMatcher, WhichQuotes } from './plugins/targets/smartQuotesMatcher';
 import { useSmartQuotes } from './plugins/targets/targetsConfig';
 import { ModeDataFor } from '../mode/modeData';
+
+import { EventEmitter } from 'vscode';
+import { IFindStartEvent, IFindEndEvent } from 'extension';
 
 /**
  * A movement is something like 'h', 'k', 'w', 'b', 'gg', etc.
@@ -844,8 +847,22 @@ function findHelper(
 }
 
 @RegisterAction
-class MoveFindForward extends BaseMovement {
+export class MoveFindForward extends BaseMovement {
   keys = ['f', '<character>'];
+
+  // 定义静态事件发射器并使用类型
+  static onFindForwardStart = new EventEmitter<IFindStartEvent>();
+  static onFindForwardEnd = new EventEmitter<IFindEndEvent>();
+
+  public override couldActionApply(vimState: VimState, keysPressed: string[]): boolean {
+    const canApply = super.couldActionApply(vimState, keysPressed);
+    if (canApply && keysPressed.length === 1) {
+      // 当仅按下'f'时，触发开始事件
+      MoveFindForward.onFindForwardStart.fire({ keysPressed });
+    }
+
+    return canApply;
+  }
 
   public override async execActionWithCount(
     position: Position,
@@ -878,6 +895,9 @@ class MoveFindForward extends BaseMovement {
     if (vimState.recordedState.operator) {
       result = result.getRight();
     }
+
+    // 当action执行后触发结束事件
+    MoveFindForward.onFindForwardEnd.fire({ position: result, searchChar: this.keysPressed[1] });
 
     return result;
   }
