@@ -904,8 +904,22 @@ export class MoveFindForward extends BaseMovement {
 }
 
 @RegisterAction
-class MoveFindBackward extends BaseMovement {
+export class MoveFindBackward extends BaseMovement {
   keys = ['F', '<character>'];
+
+  // 定义静态事件发射器并使用类型
+  static onFindBackwardStart = new EventEmitter<IFindStartEvent>();
+  static onFindBackwardEnd = new EventEmitter<IFindEndEvent>();
+
+  public override couldActionApply(vimState: VimState, keysPressed: string[]): boolean {
+    const canApply = super.couldActionApply(vimState, keysPressed);
+    if (canApply && keysPressed.length === 1) {
+      // 当仅按下'F'时，触发开始事件
+      MoveFindBackward.onFindBackwardStart.fire({ keysPressed });
+    }
+
+    return canApply;
+  }
 
   public override async execActionWithCount(
     position: Position,
@@ -930,6 +944,9 @@ class MoveFindBackward extends BaseMovement {
     if (!result) {
       return failedMovement(vimState);
     }
+
+    // 当action执行后触发结束事件
+    MoveFindBackward.onFindBackwardEnd.fire({ position: result, searchChar: this.keysPressed[1] });
 
     return result;
   }
