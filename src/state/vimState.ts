@@ -217,8 +217,7 @@ export class VimState implements vscode.Disposable {
       : this.currentMode;
   }
 
-  private readonly modeChangeEmitter = new vscode.EventEmitter<Mode>();
-  public readonly onModeChanged = this.modeChangeEmitter.event;
+  static onModeChanged = new vscode.EventEmitter<Mode>();
 
   public async setModeData(modeData: ModeData): Promise<void> {
     if (modeData === undefined) {
@@ -244,7 +243,7 @@ export class VimState implements vscode.Disposable {
 
     // 在模式改变时触发事件
     if (this.modeData.mode !== modeData.mode) {
-      this.modeChangeEmitter.fire(modeData.mode);
+      VimState.onModeChanged.fire(modeData.mode);
     }
 
     this.modeData = modeData;
@@ -336,7 +335,6 @@ export class VimState implements vscode.Disposable {
 
   dispose() {
     this.nvim?.dispose();
-    this.modeChangeEmitter.dispose();
   }
 }
 
