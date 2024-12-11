@@ -99,14 +99,30 @@ export class SneakBackward extends BaseMovement {
   ];
   override isJump = true;
 
+  // 定义静态事件发射器并使用类型
+  static onSneakBackwardStart = new EventEmitter<ISneakStartEvent>();
+  static onSneakBackwardEnd = new EventEmitter<ISneakEndEvent>();
+
   public override couldActionApply(vimState: VimState, keysPressed: string[]): boolean {
     const startingLetter = vimState.recordedState.operator === undefined ? 'S' : 'Z';
 
-    return (
+    // return (
+    //   configuration.sneak &&
+    //   super.couldActionApply(vimState, keysPressed) &&
+    //   keysPressed[0] === startingLetter
+    // );
+
+    const canApply =
       configuration.sneak &&
       super.couldActionApply(vimState, keysPressed) &&
-      keysPressed[0] === startingLetter
-    );
+      keysPressed[0] === startingLetter;
+
+    if (canApply && keysPressed.length === 1) {
+      // 当仅按下'S'时，触发开始事件
+      SneakBackward.onSneakBackwardStart.fire({ keysPressed });
+    }
+
+    return canApply;
   }
 
   public override async execAction(
@@ -149,6 +165,8 @@ export class SneakBackward extends BaseMovement {
       }
 
       if (matchIndex >= 0) {
+        // 触发结束事件
+        SneakBackward.onSneakBackwardEnd.fire({ line: i, searchString });
         return new Position(i, matchIndex);
       }
     }
