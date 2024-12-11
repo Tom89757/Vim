@@ -2,7 +2,6 @@ import { SneakForward, SneakBackward } from './actions/plugins/sneak';
 import { MoveFindForward, MoveFindBackward } from './actions/motion';
 import { ExtensionContext, EventEmitter, Position } from 'vscode';
 import { Mode } from './mode/mode';
-// import { getAndUpdateModeHandler } from '../extensionBase';
 import { VimState } from './state/vimState';
 
 // 定义事件类型接口
@@ -57,28 +56,10 @@ export class VimAPI implements Disposable {
     MoveFindBackward.onFindBackwardStart.event((e) => this.findBackwardStartEmitter.fire(e));
     MoveFindBackward.onFindBackwardEnd.event((e) => this.findBackwardEndEmitter.fire(e));
     VimState.onModeChanged.event((e) => this.modeChangeEmitter.fire(e));
-
-    // // 使用void操作符来明确标记这是一个未处理的Promise
-    // void this.listenToModeChanges();
   }
   [Symbol.dispose](): void {
     throw new Error('Method not implemented.');
   }
-
-  // public async getCurrentMode(): Promise<Mode | undefined> {
-  //   const modeHandler = await getAndUpdateModeHandler();
-  //   return modeHandler?.vimState.currentMode;
-  // }
-
-  // private async listenToModeChanges() {
-  //   const modeHandler = await getAndUpdateModeHandler();
-  //   if (modeHandler) {
-  //     // 当 vimState 的模式发生变化时触发事件
-  //     modeHandler.vimState.onModeChanged((newMode: Mode) => {
-  //       this.modeChangeEmitter.fire(newMode);
-  //     });
-  //   }
-  // }
 
   dispose() {
     this.sneakForwardStartEmitter.dispose();
