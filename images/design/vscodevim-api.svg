@@ -1,0 +1,24 @@
+<svg width="566.9" height="566.9" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1">
+
+ <g>
+  <title>Layer 1</title>
+  <polygon fill="#FFFFFF" points="1.9000015258789062,281.70001220703125 234.70001220703125,48.900001525878906 467.5999755859375,281.79998779296875 234.70001220703125,514.5999755859375 " class="st0" id="white"/>
+  <g id="Color_Diamond">
+   <polygon id="svg_1" fill="#208ECD" points="50.9,280.7 108.6,223 108.6,338.5  " class="st1"/>
+   <polygon id="svg_2" fill="#208ECD" points="369.9,134.1 196.5,307.5 197.5,134.1 212,119.6 283.7,47.9  " class="st1"/>
+   <polygon id="svg_3" fill="#208ECD" points="516.6,280.8 283.7,513.6 195.8,425.7 253.6,367.9 342.5,279.1 357,264.6 377.1,244.5 428.8,192.9  " class="st1"/>
+  </g>
+  <g id="Reflections">
+   <polygon id="svg_4" fill="#FFFFFF" opacity="0.3" points="283.7,220.3 196.5,307.5 197.5,134.1  " class="st2"/>
+   <polygon id="svg_5" fill="#FFFFFF" opacity="0.3" points="430.3,366.8 341.3,455.7 253.6,367.9 342.5,279.1  " class="st2"/>
+   <rect id="svg_6" fill="#FFFFFF" opacity="0.3" height="121.9" width="28.5" class="st2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -30.2983 232.2034)" y="91.7" x="250.9"/>
+   <polygon id="svg_7" fill="#FFFFFF" opacity="0.3" points="464.8,332.2 444.7,352.4 357,264.6 377.1,244.5  " class="st2"/>
+  </g>
+  <g id="Grey_tips">
+   <polygon id="svg_8" fill="#D1D3D4" points="108.6,338.5 195.8,425.7 108.6,512.8  " class="st3"/>
+   <polygon id="svg_9" fill="#D1D3D4" points="108.6,134.1 197.5,134.1 108.6,223  " class="st3"/>
+   <polygon id="svg_10" fill="#D1D3D4" points="487.3,134.1 443.2,178.5 428.8,192.9 369.9,134.1  " class="st3"/>
+  </g>
+  <text transform="matrix(8.53847 0 0 7.69577 -2609.76 -3152.07)" stroke="null" xml:space="preserve" text-anchor="start" font-family="'Texturina'" font-size="24" stroke-width="0" id="svg_11" y="471.22175" x="331.89384" fill="#d1d3d4">api</text>
+ </g>
+</svg>
